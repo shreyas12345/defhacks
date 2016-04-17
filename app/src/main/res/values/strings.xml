@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">DefHacks</string>
+    <string name="button_name">Settings</string>
+    <string name="recipient_button">Recipient</string>
+</resources>
