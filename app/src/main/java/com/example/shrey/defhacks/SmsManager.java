@@ -9,15 +9,11 @@ import android.os.Vibrator;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
-import com.example.shrey.defhacks.Config;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by Brian on 4/16/16.
- */
+
 public class SmsManager extends BroadcastReceiver {
     private String TAG = SmsManager.class.getSimpleName();
     public String message;
@@ -27,6 +23,8 @@ public class SmsManager extends BroadcastReceiver {
     public SmsManager(/*Context mContext*/) {
 //        this.mContext = mContext;
     }
+
+
 
     public static String[] morse = {".-", "-...",  "-.-.", "-..",  ".", "..-.",
             "--.",   "....",  "..",   ".---", "-.-",  ".-..",
@@ -48,8 +46,9 @@ public class SmsManager extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-
-
+        for (int i =0; i < 200; i++) {
+            System.out.println("HIIII");
+        }
 
 
         // Get the data (SMS data) bound to intent
@@ -101,6 +100,7 @@ public class SmsManager extends BroadcastReceiver {
 
         for (int i = 0; i < englishTextArray.length; i++) {
             System.out.println(englishTextArray[i]);
+            System.out.println("Hello");
         }
         for (int i = 1; i < englishTextArray.length; i++){
             finalMorse.add(morse[Arrays.asList(text).indexOf(englishTextArray[i])]);
