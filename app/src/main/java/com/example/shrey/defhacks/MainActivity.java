@@ -42,13 +42,15 @@ public class MainActivity extends AppCompatActivity {
         parentLayout = (RelativeLayout) findViewById(R.id.layout);
 
         settingsButton = (Button) findViewById(R.id.settingsButton);
-
+        final Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, Settings.class);
                 startActivityForResult(intent, REQUEST_CODE);
+                v.vibrate(20);
+
             }
         });
 
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 values.add(".");
                 Toast.makeText(getApplicationContext(), "dot", Toast.LENGTH_SHORT).show();
+                v.vibrate(20);
             }
         });
 
@@ -66,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "dash", Toast.LENGTH_SHORT).show();
                 values.add("-");
                 System.out.println(values);
+                v.vibrate(40);
                 return true;
             }
         });
@@ -95,12 +99,11 @@ public class MainActivity extends AppCompatActivity {
         if ((keyCode == KeyEvent.KEYCODE_VOLUME_UP)) {
             state = !state;
             String lala;
-            if (state) {
-                lala = "on";
+            if (!state) {
+                lala = "off";
                 Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                v.vibrate(500);
-            }
-            else lala = "off";
+                v.vibrate(200);
+            } else lala = "on";
             Toast.makeText(getApplicationContext(), lala, Toast.LENGTH_SHORT).show();
 
         }
@@ -118,46 +121,59 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)) {       //Go to next favorite number
-
-                sendSMSMessage();
-            }
-        }
-
-        if (state) {
-
-            if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)) {
-                currentFavorite++;
-                if (currentFavorite >= favoriteList.size()) {
-                    currentFavorite = 0;
+                if (values.size() != 0) {
+                    sendSMSMessage();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Enter a message please", Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(getApplicationContext(), "current favorite = " + currentFavorite, Toast.LENGTH_SHORT).show();
-            }
-
-            if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-                Toast.makeText(getApplicationContext(), "clear", Toast.LENGTH_SHORT).show();
-                values.clear();
             }
         }
+
+            if (state) {
+
+                if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)) {
+
+                    currentFavorite++;
+                    if (currentFavorite >= favoriteList.size()) {
+                        currentFavorite = 0;
+                    }
+                    Toast.makeText(getApplicationContext(), "Current contact = " + favoriteList.get(currentFavorite), Toast.LENGTH_SHORT).show();
+                }
+
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+                    Toast.makeText(getApplicationContext(), "clear", Toast.LENGTH_SHORT).show();
+                    values.clear();
+                    final Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                    v.vibrate(20);
+                    try {
+                        Thread.sleep(1);                 //1000 milliseconds is one second.
+                    } catch (InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+            }
+
         return true;
     }
-
 
 
     protected void sendSMSMessage() {
         Log.i("Send SMS", "");
         //String phoneNo = txtphoneNo.getText().toString();
+        try {
+
         String phoneNo = favoriteList.get(currentFavorite);
         System.out.println(values);
         String message = toEnglish(values);
         System.out.println(message);
 
 
-        try {
+
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(phoneNo, null, message, null, null);
             Toast.makeText(getApplicationContext(), "SMS sent.", Toast.LENGTH_LONG).show();
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "SMS failed, please try again.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Please Enter Your Numbers in the Settings.", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
 
@@ -233,8 +249,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-//receive messages through app
-//need to save numbers
+//
 //type spaces
-//fix closing when there is no message or number
-
+//UI

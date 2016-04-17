@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Scanner;
 
 public class Settings extends AppCompatActivity {
     private EditText one;
@@ -34,6 +35,7 @@ public class Settings extends AppCompatActivity {
     public String input2;
     public String input3;
     public String input4;
+    private Button loadButton;
 
     /**Context mContext;
 
@@ -47,13 +49,16 @@ public class Settings extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        one = (EditText)findViewById(R.id.editText);
-        two = (EditText)findViewById(R.id.editText2);
-        three= (EditText)findViewById(R.id.editText3);
-        four = (EditText)findViewById(R.id.editText4);
+        one = (EditText) findViewById(R.id.editText);
+        two = (EditText) findViewById(R.id.editText2);
+        three = (EditText) findViewById(R.id.editText3);
+        four = (EditText) findViewById(R.id.editText4);
+        loadButton = (Button) findViewById(R.id.button3);
 
-        goBack = (Button)findViewById(R.id.button);
-        save = (Button)findViewById(R.id.button2);
+        Context mContext;
+
+        goBack = (Button) findViewById(R.id.button);
+        save = (Button) findViewById(R.id.button2);
 
         goBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,61 +74,6 @@ public class Settings extends AppCompatActivity {
 
             }
         });
-
-       /** save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public boolean onClick(View view) {
-                writeToFile(one.getText().toString());
-                writeToFile(two.getText().toString());
-                writeToFile(three.getText().toString());
-                writeToFile(four.getText().toString());
-            }
-        });
-
     }
 
-    private void writeToFile(String data) {
-        try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(mContext.openFileOutput("config.txt", mContext.MODE_PRIVATE));
-            outputStreamWriter.write(data);
-            outputStreamWriter.close();
-        }
-        catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
-        }
-
-    }
-
-    private String readFromFile() {
-
-        String ret = "";
-
-        try {
-            InputStream inputStream = openFileInput("config.txt");
-
-            if ( inputStream != null ) {
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                String receiveString = "";
-                StringBuilder stringBuilder = new StringBuilder();
-
-                while ( (receiveString = bufferedReader.readLine()) != null ) {
-                    stringBuilder.append(receiveString);
-                }
-
-                inputStream.close();
-                ret = stringBuilder.toString();
-            }
-        }
-        catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
-        }
-
-        return ret;
-    }
-**/
-
-    }
 }

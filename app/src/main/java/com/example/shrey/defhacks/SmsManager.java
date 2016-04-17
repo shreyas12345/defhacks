@@ -21,7 +21,7 @@ public class SmsManager extends BroadcastReceiver {
     Context mContext;
 
     public SmsManager(/*Context mContext*/) {
-//        this.mContext = mContext;
+     //   this.mContext = mContext;
     }
 
 
@@ -45,10 +45,6 @@ public class SmsManager extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
-        for (int i =0; i < 200; i++) {
-            System.out.println("HIIII");
-        }
 
 
         // Get the data (SMS data) bound to intent
@@ -112,8 +108,9 @@ public class SmsManager extends BroadcastReceiver {
 
 
     public void processVibration(String message){
-        // String message = "Hello";
 
+
+        List<String> vibList = new ArrayList<String>();
 
         List<String> convertedMorse = toMorse(message);
 
@@ -126,10 +123,40 @@ public class SmsManager extends BroadcastReceiver {
             System.out.println(morseToVibrate[l]);
         }
 
-        morseToVibration(morseToVibrate);
+        morseToVibration(morseToVibrate, vibList);
+
+        for (int i = 0; i < vibList.size(); i++){
+            if (vibList.get(i).equals(".")){
+                //vibrate
+                v.vibrate(50);
+
+                try {
+                    Thread.sleep(500);                 //1000 milliseconds is one second.
+                } catch(InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+
+            }
+            if (vibList.get(i).equals("-")){
+                //vibrate
+                v.vibrate(500);
+
+                try {
+                    Thread.sleep(500);                 //1000 milliseconds is one second.
+                } catch(InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+        try {
+            Thread.sleep(500);                 //1000 milliseconds is one second.
+        } catch(InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+
     }
 
-    public void morseToVibration (String[] morseToVibrate){
+    public void morseToVibration (String[] morseToVibrate, List<String> vibList){
 
 
         for (int i = 0; i < morseToVibrate.length; i++){
@@ -138,19 +165,22 @@ public class SmsManager extends BroadcastReceiver {
             for (int k = 0; k < currentLetter.length(); k++){
                 if (currentLetter.substring(k, k+1).equals(".")) {
                     System.out.println("Short vibration.");
-                    v.vibrate(100);
+                    vibList.add(".");
+   //                 v.vibrate(50);
                 }
 
                 else if (currentLetter.substring(k, k+1).equals("-")){
                     System.out.println("Long vibration");
-                    v.vibrate(500);
+                    vibList.add("-");
+      //              v.vibrate(200);
                 }
 
-                else {
-                    System.out.println("Space between vibrations.");
+             //   else {
+               //     System.out.println("Space between vibrations.");
 
-                }
+               // }
             }
+            vibList.add(" ");
         }
     }
 
